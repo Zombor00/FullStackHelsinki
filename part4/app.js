@@ -4,6 +4,8 @@ const app = express()
 const blogRouter = require('./controllers/blog')
 const cors = require('cors')
 const mongoose = require('mongoose')
+require('express-async-errors')
+
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 

@@ -1,4 +1,21 @@
 // eslint-disable-next-line no-unused-vars
+
+const initialBlogs = [
+  {
+    title: 'Blog 1',
+    author: 'Author 1',
+    url: 'http://blogs.com/1',
+    likes: 3
+  },
+  {
+    title: 'Blog 2',
+    author: 'Author 2',
+    url: 'http://blogs.com/2',
+    likes: 22
+  },
+]
+
+// eslint-disable-next-line no-unused-vars
 const dummy = (blog) => {
   return 1
 }
@@ -23,5 +40,5 @@ const favoriteBlog = (blogs) => {
 }
 
 module.exports = {
-  dummy, totalLikes, favoriteBlog
+  dummy, totalLikes, favoriteBlog, initialBlogs
 }
