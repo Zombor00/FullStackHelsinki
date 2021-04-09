@@ -22,8 +22,8 @@ const blogs = [
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html', likes: 2, __v: 0 }
 ]
 
-describe('average', () => {
-  test('of one value is the value itself', () => {
+describe('totalLikes', () => {
+  test('of one blog is the like of the blog itself', () => {
     const result = listHelper.totalLikes([blogs[0]])
     expect(result).toBe(7)
   })
@@ -40,5 +40,26 @@ describe('average', () => {
 
   test('of empty array is zero', () => {
     expect(listHelper.totalLikes([])).toBe(0)
+  })
+})
+
+describe('favoriteBlog', () => {
+  test('of one blog is the blog itself', () => {
+    const result = listHelper.favoriteBlog([blogs[0]])
+    expect(result).toEqual(blogs[0])
+  })
+
+  test('of many is calculated right', () => {
+    const result = listHelper.favoriteBlog([blogs[0], blogs[1], blogs[2]])
+    expect(result).toEqual(blogs[2])
+  })
+
+  test('of many is calculated right v2', () => {
+    const result = listHelper.favoriteBlog([blogs[0], blogs[1], blogs[2], blogs[3], blogs[4], blogs[5]])
+    expect(result).toEqual(blogs[2])
+  })
+
+  test('of empty array is null', () => {
+    expect(listHelper.favoriteBlog([])).toEqual(null)
   })
 })
