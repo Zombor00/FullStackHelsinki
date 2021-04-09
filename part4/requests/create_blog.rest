@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blog/ HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Karamazov's Brothers",
+    "author": "Dostoievsky",
+    "url": "www.google.com",
+    "likes": 3
+}
