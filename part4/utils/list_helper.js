@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-
 const initialBlogs = [
   {
     title: 'Blog 1',
