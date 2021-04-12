@@ -1,7 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 
-
 blogRouter.get('/', (request, response) => {
   Blog
     .find({})
@@ -9,7 +8,6 @@ blogRouter.get('/', (request, response) => {
       response.json(blogs)
     })
 })
-
 
 blogRouter.post('/', (request, response) => {
   const blog = new Blog(request.body)
@@ -23,6 +21,14 @@ blogRouter.post('/', (request, response) => {
     .save()
     .then(result => {
       response.status(201).json(result)
+    })
+})
+
+blogRouter.delete('/:id', (request, response) => {
+  Blog
+    .findByIdAndRemove(request.params.id)
+    .then(() => {
+      response.status(204).end()
     })
 })
 

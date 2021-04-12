@@ -8,11 +8,10 @@ const Blog = require('../models/blog')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  console.log('cleared')
 
   helper.initialBlogs.forEach(async (blog) => {
     let noteObject = new Blog(blog)
-    await noteObject.save().then(console.log('saved'))
+    await noteObject.save()
   })
 })
 
@@ -40,15 +39,15 @@ test('post to /api/blogs working correctly', async () => {
     likes: 10
   }
 
-  await api
+  const response = await api
     .post('/api/blog')
     .send(newBlog)
     .expect(201)
 
-  const response = await api.get('/api/blog')
+  const response2 = await api.get('/api/blog')
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
-  const newBlogPost = response.body.pop()
+  expect(response2.body).toHaveLength(helper.initialBlogs.length + 1)
+  const newBlogPost = response.body
   delete newBlogPost.id
   delete newBlogPost.__v
   expect(newBlogPost).toEqual(newBlog)
@@ -56,20 +55,17 @@ test('post to /api/blogs working correctly', async () => {
 
 test('if likes misses in the post is assigned value 0 automatically', async () => {
   const newBlog = {
-    title: 'Blog 3',
-    author: 'Author 3',
-    url: 'http://blogs.com/3'
+    title: 'Blog 4',
+    author: 'Author 4',
+    url: 'http://blogs.com/4'
   }
 
-  await api
+  const response = await api
     .post('/api/blog')
     .send(newBlog)
     .expect(201)
 
-  const response = await api.get('/api/blog')
-
-  const lastBlog = response.body.pop()
-  expect(lastBlog.likes).toBe(0)
+  expect(response.body.likes).toBe(0)
 })
 
 test('if titles and url are missing backend sends back 400 Bad Request', async () => {
@@ -82,6 +78,29 @@ test('if titles and url are missing backend sends back 400 Bad Request', async (
     .post('/api/blog')
     .send(newBlog)
     .expect(400)
+})
+
+test('testing delete works', async () => {
+  const newBlog = {
+    title: 'Blog 5',
+    author: 'Author 5',
+    url: 'http://blogs.com/5',
+    likes: 25
+  }
+
+  const response = await api
+    .post('/api/blog')
+    .send(newBlog)
+    .expect(201)
+
+  await api
+    .delete('/api/blog/' + response.body.id)
+    .expect(204)
+
+  const response2 = await api.get('/api/blog')
+  response2.body.forEach(blog => {
+    expect(blog.title).not.toContain('Blog 4')
+  })
 })
 
 afterAll(() => {
