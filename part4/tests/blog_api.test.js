@@ -12,10 +12,8 @@ beforeEach(async () => {
 
   helper.initialBlogs.forEach(async (blog) => {
     let noteObject = new Blog(blog)
-    await noteObject.save()
-    console.log('saved')
+    await noteObject.save().then(console.log('saved'))
   })
-  console.log('done')
 })
 
 test('blogs are returned as json and return the correct number of blogs', async () => {
@@ -74,6 +72,19 @@ test('if likes misses in the post is assigned value 0 automatically', async () =
   expect(lastBlog.likes).toBe(0)
 })
 
+test('if titles and url are missing backend sends back 400 Bad Request', async () => {
+  const newBlog = {
+    author: 'Author 3',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blog')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
+
