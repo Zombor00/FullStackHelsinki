@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blog/ HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Karamazov's Brothers",
+    "title": "Karamazov's Brothers 2",
     "author": "Dostoievsky",
     "url": "www.google.com",
-    "likes": 3
+    "likes": 3,
+    "userId": "607490f7534d533704fa1a98"
 }
