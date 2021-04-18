@@ -3,7 +3,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 blogRouter.get('/', async (request, response)  => {
-  const blogs = await Blog.find({}).populate('user')
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
@@ -13,6 +13,11 @@ blogRouter.post('/', async (request, response) => {
   if(body.title === undefined && body.url === undefined){
     response.status(400).end()
     return
+  }
+
+  if(body.userId === 'undefined'){
+    const user = await User.findOne({})
+    body.userId = user._id
   }
 
   const tmpBlog = {

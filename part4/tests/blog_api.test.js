@@ -18,7 +18,7 @@ beforeEach(async () => {
 
 test('blogs are returned as json and return the correct number of blogs', async () => {
   const response = await api
-    .get('/api/blog')
+    .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
@@ -27,8 +27,10 @@ test('blogs are returned as json and return the correct number of blogs', async 
 
 test('blog have the attribute id', async () => {
   const response = await api
-    .get('/api/blog')
+    .get('/api/blogs')
+    .expect(200)
 
+  console.log(response.body)
   expect(response.body[0].id).toBeDefined()
 })
 
@@ -41,11 +43,11 @@ test('post to /api/blogs working correctly', async () => {
   }
 
   const response = await api
-    .post('/api/blog')
+    .post('/api/blogs')
     .send(newBlog)
     .expect(201)
 
-  const response2 = await api.get('/api/blog')
+  const response2 = await api.get('/api/blogs')
 
   expect(response2.body).toHaveLength(helper.initialBlogs.length + 1)
   const newBlogPost = response.body
@@ -62,7 +64,7 @@ test('if likes misses in the post is assigned value 0 automatically', async () =
   }
 
   const response = await api
-    .post('/api/blog')
+    .post('/api/blogs')
     .send(newBlog)
     .expect(201)
 
@@ -76,7 +78,7 @@ test('if titles and url are missing backend sends back 400 Bad Request', async (
   }
 
   await api
-    .post('/api/blog')
+    .post('/api/blogs')
     .send(newBlog)
     .expect(400)
 })
@@ -90,15 +92,15 @@ test('testing delete works', async () => {
   }
 
   const response = await api
-    .post('/api/blog')
+    .post('/api/blogs')
     .send(newBlog)
     .expect(201)
 
   await api
-    .delete('/api/blog/' + response.body.id)
+    .delete('/api/blogs/' + response.body.id)
     .expect(204)
 
-  const response2 = await api.get('/api/blog')
+  const response2 = await api.get('/api/blogs')
   response2.body.forEach(blog => {
     expect(blog.title).not.toContain('Blog 4')
   })
