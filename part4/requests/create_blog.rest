@@ -1,8 +1,9 @@
-POST http://localhost:3003/api/blog/ HTTP/1.1
+POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
+Authorization: bearer token
 
 {
-    "title": "Karamazov's Brothers 2",
+    "title": "Karamazov's Brothers 3",
     "author": "Dostoievsky",
     "url": "www.google.com",
     "likes": 3,

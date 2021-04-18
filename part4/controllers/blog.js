@@ -1,43 +1,58 @@
+const jwt = require('jsonwebtoken')
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 blogRouter.get('/', async (request, response)  => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogRouter.post('/', async (request, response) => {
-  const body = request.body
+blogRouter.post('/', async (request, response, next) => {
+  try{
+    const body = request.body
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
 
-  if(body.title === undefined && body.url === undefined){
-    response.status(400).end()
-    return
+    if(body.title === undefined && body.url === undefined){
+      response.status(400).end()
+      return
+    }
+
+    const tmpBlog = {
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+      user: user.id
+    }
+
+    const blog = new Blog(tmpBlog)
+
+    const savedBlog = await blog.save()
+    if(body.userId !== undefined){
+      const user = await User.findById(blog.user)
+      user.blogs = user.blogs.concat(savedBlog._id)
+      await user.save()
+    }
+
+    return response.status(201).json(savedBlog)
+  }catch(error){
+    next(error)
   }
 
-  if(body.userId === 'undefined'){
-    const user = await User.findOne({})
-    body.userId = user._id
-  }
-
-  const tmpBlog = {
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes,
-    user: body.userId
-  }
-
-  const blog = new Blog(tmpBlog)
-
-  const savedBlog = await blog.save()
-  if(body.userId !== undefined){
-    const user = await User.findById(blog.user)
-    user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
-  }
-
-  return response.status(201).json(savedBlog)
 })
 
 blogRouter.delete('/:id', async (request, response) => {
