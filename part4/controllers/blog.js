@@ -24,12 +24,14 @@ blogRouter.post('/', async (request, response) => {
   }
 
   const blog = new Blog(tmpBlog)
-  const user = await User.findById(blog.user)
 
   const savedBlog = await blog.save()
+  if(body.userId !== undefined){
+    const user = await User.findById(blog.user)
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
+  }
 
-  user.blogs = user.blogs.concat(savedBlog._id)
-  await user.save()
   return response.status(201).json(savedBlog)
 })
 
