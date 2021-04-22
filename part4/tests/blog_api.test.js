@@ -7,13 +7,48 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 const Blog = require('../models/blog')
 
+let token
+let userObj
+
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  userObj = await api
+    .post('/api/users')
+    .send(helper.initialUser)
+
+  userObj = userObj.body
+
+  const response = await api
+    .post('/api/login')
+    .send(helper.initialUser)
+
+  token = response.body.token
+})
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
-  helper.initialBlogs.forEach(async (blog) => {
-    let noteObject = new Blog(blog)
-    await noteObject.save()
-  })
+  const blog = helper.initialBlogs[0]
+  blog.user = userObj.id
+  let noteObject = new Blog(blog)
+  await noteObject.save()
+
+  const blog2 = helper.initialBlogs[1]
+  blog2.user = userObj.id
+  let noteObject2 = new Blog(blog2)
+  await noteObject2.save()
+
+  //helper.initialBlogs.forEach(async (blog) => {
+  //blog.user = userObj.id
+  //const response = await api
+  //  .post('/api/blogs')
+  //  .set('Authorization', 'bearer ' + token)
+  //  .send(blog)
+  //let noteObject = new Blog(blog)
+  //await noteObject.save()
+  //})
+
 })
 
 test('blogs are returned as json and return the correct number of blogs', async () => {
@@ -30,7 +65,6 @@ test('blog have the attribute id', async () => {
     .get('/api/blogs')
     .expect(200)
 
-  console.log(response.body)
   expect(response.body[0].id).toBeDefined()
 })
 
@@ -39,11 +73,13 @@ test('post to /api/blogs working correctly', async () => {
     title: 'Blog 3',
     author: 'Author 3',
     url: 'http://blogs.com/3',
-    likes: 10
+    likes: 10,
+    user: userObj.id
   }
 
   const response = await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(newBlog)
     .expect(201)
 
@@ -56,15 +92,32 @@ test('post to /api/blogs working correctly', async () => {
   expect(newBlogPost).toEqual(newBlog)
 })
 
+test('post to /api/blogs returns 401 if not token provided', async () => {
+  const newBlog = {
+    title: 'Blog 3',
+    author: 'Author 3',
+    url: 'http://blogs.com/3',
+    likes: 10,
+    user: userObj.id
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+})
+
 test('if likes misses in the post is assigned value 0 automatically', async () => {
   const newBlog = {
     title: 'Blog 4',
     author: 'Author 4',
-    url: 'http://blogs.com/4'
+    url: 'http://blogs.com/4',
+    user: userObj.id
   }
 
   const response = await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(newBlog)
     .expect(201)
 
@@ -74,11 +127,13 @@ test('if likes misses in the post is assigned value 0 automatically', async () =
 test('if titles and url are missing backend sends back 400 Bad Request', async () => {
   const newBlog = {
     author: 'Author 3',
-    likes: 10
+    likes: 10,
+    user: userObj.id
   }
 
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(newBlog)
     .expect(400)
 })
@@ -88,21 +143,24 @@ test('testing delete works', async () => {
     title: 'Blog 5',
     author: 'Author 5',
     url: 'http://blogs.com/5',
-    likes: 25
+    likes: 25,
+    user: userObj.id
   }
 
   const response = await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(newBlog)
     .expect(201)
 
   await api
     .delete('/api/blogs/' + response.body.id)
+    .set('Authorization', 'bearer ' + token)
     .expect(204)
 
   const response2 = await api.get('/api/blogs')
   response2.body.forEach(blog => {
-    expect(blog.title).not.toContain('Blog 4')
+    expect(blog.title).not.toContain('Blog 5')
   })
 })
 

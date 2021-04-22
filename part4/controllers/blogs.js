@@ -10,6 +10,10 @@ blogRouter.post('/', async (request, response, next) => {
   try{
     const body = request.body
 
+    if(request.user === undefined){
+      return response.status(401).end()
+    }
+
     if(body.title === undefined && body.url === undefined){
       response.status(400).end()
       return
@@ -22,7 +26,6 @@ blogRouter.post('/', async (request, response, next) => {
       likes: body.likes,
       user:  request.user._id
     }
-
     const blog = new Blog(tmpBlog)
 
     const savedBlog = await blog.save()
@@ -41,7 +44,10 @@ blogRouter.post('/', async (request, response, next) => {
 blogRouter.delete('/:id', async (request, response, next) => {
   try{
     const blog = await Blog.findById(request.params.id)
-    if( request.user._id.toString() === blog.user._id.toString()){
+    if(blog === undefined){
+      return response.status(400).json({ error: 'No such blog' })
+    }
+    if(request.user._id !== undefined && request.user._id.toString() === blog.user._id.toString()){
       await Blog.findByIdAndRemove(request.params.id)
       response.status(204).end()
     }else{

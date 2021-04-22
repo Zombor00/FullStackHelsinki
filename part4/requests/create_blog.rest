@@ -1,7 +1,7 @@
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhfYnJhdm8iLCJpZCI6IjYwNzQ5MGY3NTM0ZDUzMzcwNGZhMWE5OCIsImlhdCI6MTYxODc4NzQyOCwiZXhwIjoxNjE4NzkxMDI4fQ.ujn6aU0ADIDZg8TSiWyMKsxti14SqC7kouJ7C2mDxs8
-
+Authorization: bearer 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhfYnJhdm8iLCJpZCI6IjYwNzQ5MGY3NTM0ZDUzMzcwNGZhMWE5OCIsImlhdCI6MTYxOTEzNDI5OCwiZXhwIjoxNjE5MTM3ODk4fQ.XwEeNkfFkFjGb23G0fnLraCaxONGSxmXYNsWbslRxm8
 {
     "title": "Deleted",
     "author": "Dostoievsky",
