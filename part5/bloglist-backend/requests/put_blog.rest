@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/60747a70cb1ff40a4c4f7641 HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Karamazov's Brothers",
+    "author": "Dostoievsky",
+    "url": "www.google.com",
+    "likes": 10
+}
