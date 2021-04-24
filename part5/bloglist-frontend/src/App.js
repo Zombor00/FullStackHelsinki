@@ -45,7 +45,7 @@ const App = () => {
       blogService.setToken(user.token)
     } catch (exception) {
       setError(true)
-      setMessage('Wrong credentials')
+      setMessage('Wrong username or password')
       setTimeout(() => {
         setMessage(null)
         setError(false)
@@ -69,7 +69,7 @@ const App = () => {
       const newBlog = await blogService.create(blog)
       setBlogs(blogs.concat(newBlog))
       setError(false)
-      setMessage('Blog created')
+      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -136,8 +136,6 @@ const App = () => {
         {userLogged()}
       </div>
     }
-
-     
     </div>
   )
 }
