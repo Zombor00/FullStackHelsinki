@@ -29,12 +29,13 @@ blogRouter.post('/', async (request, response, next) => {
     const blog = new Blog(tmpBlog)
 
     const savedBlog = await blog.save()
+    const newBlog = await Blog.findById(savedBlog._id).populate('user')
     if(request.user._id !== undefined){
       request.user.blogs = request.user.blogs.concat(savedBlog._id)
       await request.user.save()
     }
 
-    return response.status(201).json(savedBlog)
+    return response.status(201).json(newBlog)
   }catch(error){
     next(error)
   }
@@ -65,11 +66,12 @@ blogRouter.put('/:id', async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user: body.user
   }
 
-  const res = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-  response.status(201).json(res.body)
+  const res = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user')
+  response.json(res.toJSON())
 })
 
 module.exports = blogRouter

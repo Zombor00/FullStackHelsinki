@@ -34,7 +34,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log("patata")
 
     try {
       const user = await loginService.login({
@@ -59,7 +58,7 @@ const App = () => {
     console.log('logging in with', username, password)
   }
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
     blogService.setToken(null)
@@ -87,7 +86,26 @@ const App = () => {
         setMessage(null)
       }, 5000)
     }
+  }
 
+  const handleLike = async (event) => {
+    event.preventDefault()
+    const id = event.target.value
+    const blog = blogs.find(blog => blog.id === id)
+
+    const newBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id 
+    }
+
+    const retBlog = await blogService
+      .change(newBlog, blog.id)
+    
+    console.log(retBlog)
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : retBlog))
   }
 
   const userLogged = () => (
@@ -97,7 +115,7 @@ const App = () => {
       <button onClick={() => handleLogout()}>logout</button>
       </p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLike={handleLike}/>
       )}
       <Togglable buttonLabel="new blog  " ref={blogFormRef}>
         <BlogForm handleCreate={handleCreate} />
