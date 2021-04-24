@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -104,19 +104,17 @@ const App = () => {
     const retBlog = await blogService
       .change(newBlog, blog.id)
     
-    console.log(retBlog)
     setBlogs(blogs.map(blog => blog.id !== id ? blog : retBlog))
   }
 
   const userLogged = () => (
     <div>
       <h2>blogs</h2>
-      <p>{user.name} logged-in
-      <button onClick={() => handleLogout()}>logout</button>
+      <p>
+        {user.name} logged-in
+        <button onClick={() => handleLogout()}>logout</button>
       </p>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleLike}/>
-      )}
+      <Blogs blogs={blogs} handleLike={handleLike} />
       <Togglable buttonLabel="new blog  " ref={blogFormRef}>
         <BlogForm handleCreate={handleCreate} />
       </Togglable>
