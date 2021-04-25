@@ -53,6 +53,23 @@ describe('Blog app', function() {
       
       cy.contains('Blog 0 Alex')
     })
-  })
 
+    describe('When logged in and with a blog', function() {
+      beforeEach(function() {
+        cy.contains('new blog').click()
+        cy.get('#title').type('Blog 0')
+        cy.get('#author').type('Alex')
+        cy.get('#url').type('www.blog0.com')
+        cy.get('#create-button').click()
+      })
+
+      it('A blog can be liked', function() {
+        cy.contains('view').click()
+        cy.contains('likes 0')
+        cy.contains('like').click()
+        
+        cy.contains('likes 1')
+      })
+    }) 
+  })
 })
