@@ -12,7 +12,7 @@ const Blog = ({ blog, handleLike, handleDelete, userLogged }) => {
     handleDelete: PropTypes.func.isRequired,
     userLogged: PropTypes.object.isRequired,
   }
-  
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -29,19 +29,19 @@ const Blog = ({ blog, handleLike, handleDelete, userLogged }) => {
           <button onClick={() => setLoginVisible(true)}>view</button>
         </div>
       </div>
-    
-    <div style={showWhenVisible}>
-      <div style={blogStyle}>
-        {blog.title} {blog.author}
-        <button onClick={() => setLoginVisible(false)}>hide</button> <br/>
-        {blog.url} <br/>
-        likes {blog.likes} 
-        <button value={ blog.id } onClick={ handleLike }>like</button> <br/>
-        {blog.user.name} <br/>
-        {blog.user.username === userLogged.username && <button value={ blog.id } onClick={handleDelete}>remove</button> }
+
+      <div style={showWhenVisible}>
+        <div style={blogStyle}>
+          {blog.title} {blog.author}
+          <button onClick={() => setLoginVisible(false)}>hide</button> <br/>
+          {blog.url} <br/>
+        likes {blog.likes}
+          <button value={ blog.id } onClick={ handleLike }>like</button> <br/>
+          {blog.user.name} <br/>
+          {blog.user.username === userLogged.username && <button value={ blog.id } onClick={handleDelete}>remove</button> }
+        </div>
       </div>
     </div>
-  </div>
   )
 }
 

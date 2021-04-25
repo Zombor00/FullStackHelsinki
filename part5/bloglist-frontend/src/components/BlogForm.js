@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 const BlogForm = ({ handleCreate }) => {
-  
-  const [title, setTitle] = useState('') 
-  const [author, setAuthor] = useState('') 
-  const [url, setUrl] = useState('') 
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   const createBlog = async (event) => {
     event.preventDefault()
@@ -23,8 +23,8 @@ const BlogForm = ({ handleCreate }) => {
   return(
     <form onSubmit={createBlog}>
       <div>
-        title: 
-          <input
+        title:
+        <input
           type="text"
           value={title}
           name="title"
@@ -32,8 +32,8 @@ const BlogForm = ({ handleCreate }) => {
         />
       </div>
       <div>
-        author: 
-          <input
+        author:
+        <input
           type="text"
           value={author}
           name="author"
@@ -41,8 +41,8 @@ const BlogForm = ({ handleCreate }) => {
         />
       </div>
       <div>
-        url: 
-          <input
+        url:
+        <input
           type="text"
           value={url}
           name="url"

@@ -10,8 +10,8 @@ import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(false)
@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const App = () => {
       })
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
       setUsername('')
       setPassword('')
@@ -98,12 +98,12 @@ const App = () => {
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
-      user: blog.user.id 
+      user: blog.user.id
     }
 
     const retBlog = await blogService
       .change(newBlog, blog.id)
-    
+
     setBlogs(blogs.map(blog => blog.id !== id ? blog : retBlog))
   }
 
@@ -142,7 +142,7 @@ const App = () => {
       <Togglable buttonLabel="new blog  " ref={blogFormRef}>
         <BlogForm handleCreate={handleCreate} />
       </Togglable>
-      
+
     </div>
   )
 
@@ -151,20 +151,20 @@ const App = () => {
       <Notification message={message} error={error} />
 
       {user === null ?
-      <div>
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleLogin={handleLogin}
-        />
-      </div>
-      :
-      <div>
-        {userLogged()}
-      </div>
-    }
+        <div>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={handleLogin}
+          />
+        </div>
+        :
+        <div>
+          {userLogged()}
+        </div>
+      }
     </div>
   )
 }
