@@ -22,16 +22,16 @@ const Blog = ({ blog, handleLike, handleDelete, userLogged }) => {
   }
 
   return(
-    <div>
+    <div className='blog'>
       <div style={hideWhenVisible}>
-        <div style={blogStyle}>
+        <div style={blogStyle} className='blogDefault'>
           {blog.title} {blog.author}
           <button onClick={() => setLoginVisible(true)}>view</button>
         </div>
       </div>
 
       <div style={showWhenVisible}>
-        <div style={blogStyle}>
+        <div style={blogStyle} className='blogFull'>
           {blog.title} {blog.author}
           <button onClick={() => setLoginVisible(false)}>hide</button> <br/>
           {blog.url} <br/>
