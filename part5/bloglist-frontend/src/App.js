@@ -107,6 +107,30 @@ const App = () => {
     setBlogs(blogs.map(blog => blog.id !== id ? blog : retBlog))
   }
 
+  const handleDelete = async (event) => {
+    event.preventDefault()
+    const id = event.target.value
+    const blog = blogs.find(blog => blog.id === id)
+    try {
+      if(window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)){
+        await blogService.deletePost(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+        setError(false)
+        setMessage(`The blog ${blog.title} by ${blog.author} has been deleted`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      setError(true)
+      setMessage('Error when deleting the blog')
+      setTimeout(() => {
+        setError(false)
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   const userLogged = () => (
     <div>
       <h2>blogs</h2>
@@ -114,7 +138,7 @@ const App = () => {
         {user.name} logged-in
         <button onClick={() => handleLogout()}>logout</button>
       </p>
-      <Blogs blogs={blogs} handleLike={handleLike} />
+      <Blogs blogs={blogs} handleLike={handleLike} handleDelete={handleDelete} userLogged={user}/>
       <Togglable buttonLabel="new blog  " ref={blogFormRef}>
         <BlogForm handleCreate={handleCreate} />
       </Togglable>
