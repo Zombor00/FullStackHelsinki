@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, handleLike, handleDelete, userLogged }) => {
   const [loginVisible, setLoginVisible] = useState(false)
   const hideWhenVisible = { display: loginVisible ? 'none' : '' }
   const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+  Blog.propTypes = {
+    blog: PropTypes.object.isRequired,
+    handleLike: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    userLogged: PropTypes.object.isRequired,
+  }
   
   const blogStyle = {
     paddingTop: 10,
