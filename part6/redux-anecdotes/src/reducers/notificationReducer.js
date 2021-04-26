@@ -1,6 +1,4 @@
-const initialState = null
-
-const notificationReducer = (state = initialState, action) => {
+const notificationReducer = (state = null, action) => {
   console.log('notif state now: ', state)
   console.log('action', action)
 
@@ -14,14 +12,20 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const changeNotification = (notification) => {
-  return {
-    type: 'CHANGE',
-    data: notification
+export const changeNotification = (notification, timeToBeRemoved) => {
+  return async dispatch => {
+    dispatch({
+      type: 'CHANGE',
+      data: notification
+    })
+
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, timeToBeRemoved * 1000)
   }
 }
 
-export const removeNotification = (notification) => {
+export const removeNotification = () => {
   return {
     type: 'REMOVE'
   }
