@@ -1,3 +1,5 @@
+let timeoutID = null
+
 const notificationReducer = (state = null, action) => {
   console.log('notif state now: ', state)
   console.log('action', action)
@@ -19,8 +21,13 @@ export const changeNotification = (notification, timeToBeRemoved) => {
       data: notification
     })
 
-    setTimeout(() => {
+    if(timeoutID !== null){
+      clearTimeout(timeoutID)
+    }
+
+    timeoutID = setTimeout(() => {
       dispatch(removeNotification())
+      timeoutID = null
     }, timeToBeRemoved * 1000)
   }
 }
