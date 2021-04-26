@@ -4,7 +4,7 @@ import { useDispatch, useSelector  } from 'react-redux'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.anecdotes)
   const vote = (anecdote) => {
     dispatch(addVote(anecdote))
     console.log('vote', anecdote)
