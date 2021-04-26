@@ -18,12 +18,13 @@ const anecdoteReducer = (state = [], action) => {
 }
 
 export const addVote = (anecdote) => {
-  return {
-    type: 'VOTE',
-    data: {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    }
+  const newAnecdote = {...anecdote, votes: anecdote.votes + 1}
+  return async dispatch => {
+    await anecdoteService.vote(newAnecdote)
+    dispatch({
+      type: 'VOTE',
+      data: newAnecdote
+    })
   }
 }
 
